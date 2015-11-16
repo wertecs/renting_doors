@@ -5,8 +5,13 @@ $(document).ready(
 
         var changePrice = function (e) {
             console.log(e);
-            var years = price / monthly.getValue();
-            $("#years").value(years);
+            var months = Math.ceil(price / e);
+
+            var monthsSplit = months % 12;
+            var years = (months - monthsSplit) / 12;
+
+            $("#months").val(monthsSplit);
+            $("#years").val(years);
         };
 
         var monthly = $("#money").slider({
@@ -14,11 +19,14 @@ $(document).ready(
 
             ticks_labels: ['$300', '$500', '$1000', '$1500', '$2000', '$300', '$500', '$1000'],
             ticks_snap_bounds: 30
-        }).on('slide', function () {
-            console.log("aa");
-            $("#years").val("1");
+        });
+
+        monthly.on('slide', function () {
+            changePrice(monthly.slider('getValue'));
         });
 
 
+        monthly.slider('setValue', 500);
+        changePrice(monthly.slider('getValue'));
     }
 );
